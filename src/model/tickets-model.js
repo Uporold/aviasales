@@ -1,8 +1,12 @@
-export default class TicketsModel {
+import AbstractObservable from "./abstract-observable";
+import { UpdateType } from "../common/const";
+
+export default class TicketsModel extends AbstractObservable {
   #apiService = null;
   #tickets = [];
 
   constructor(apiService) {
+    super();
     this.#apiService = apiService;
   }
 
@@ -16,5 +20,6 @@ export default class TicketsModel {
     } catch (err) {
       this.#tickets = [];
     }
+    this.notify(UpdateType.INIT);
   };
 }

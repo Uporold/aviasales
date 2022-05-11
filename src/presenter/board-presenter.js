@@ -2,8 +2,9 @@ import { remove, render, RenderPosition } from "../common/render";
 import SortingView from "../view/sorting-view/sorting-view";
 import TicketView from "../view/ticket-view/ticket-view";
 import TicketsListView from "../view/tickets-list-view/tickets-list-view";
-import { SortType } from "../common/const";
+import { SortType, UpdateType } from "../common/const";
 import { getSortedTickets } from "../common/utils";
+import LoadingView from "../view/loading-view/loading-view";
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -14,6 +15,9 @@ export default class BoardPresenter {
 
   #ticketsListComponent = null;
   #ticketsModel = null;
+
+  #loadingComponent = new LoadingView();
+  #isLoading = true;
 
   constructor(boardContainer, ticketsModel) {
     this.#boardContainer = boardContainer;
@@ -31,7 +35,19 @@ export default class BoardPresenter {
   init = () => {
     render(this.#boardContainer, this.#boardElement, RenderPosition.BEFOREEND);
 
+    this.#ticketsModel.addObserver(this.#handleModelEvent);
+
     this.#renderBoard();
+  };
+
+  #handleModelEvent = (updateType) => {
+    switch (updateType) {
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
+    }
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -55,6 +71,14 @@ export default class BoardPresenter {
     );
   };
 
+  #renderLoading = () => {
+    render(
+      this.#boardElement,
+      this.#loadingComponent,
+      RenderPosition.AFTERBEGIN
+    );
+  };
+
   #renderTicket(container, ticket) {
     const ticketComponent = new TicketView(ticket);
     render(container, ticketComponent, RenderPosition.BEFOREEND);
@@ -73,6 +97,10 @@ export default class BoardPresenter {
   }
 
   #renderBoard = () => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     this.#renderSort();
     this.#renderTickets(this.tickets);
   };

@@ -1,0 +1,8 @@
+@import "src/styles/variables";
+
+.loader {
+  height: 250px;
+  * {
+    stroke: $mainBlueColor;
+  }
+}

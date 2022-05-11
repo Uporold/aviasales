@@ -9,6 +9,5 @@ const apiService = new ApiService("http://localhost:3000");
 const ticketsModel = new TicketsModel(apiService);
 
 const boardPresenter = new BoardPresenter(siteContainerElement, ticketsModel);
-ticketsModel.init().then(() => {
-  boardPresenter.init();
-});
+boardPresenter.init();
+ticketsModel.init();

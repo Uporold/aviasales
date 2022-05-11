@@ -3,3 +3,8 @@ export const SortType = {
   FASTEST: "FASTEST",
   NONE: "NONE",
 };
+
+export const UpdateType = {
+  INIT: "INIT",
+  FILTRATION: "FILTRATION",
+};
