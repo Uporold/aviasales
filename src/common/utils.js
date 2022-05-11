@@ -3,18 +3,32 @@ import { SortType } from "./const";
 export const getSortedTickets = (currentSortType, tickets) => {
   switch (currentSortType) {
     case SortType.CHEAPEST:
-      return tickets.sort((a, b) => a.price - b.price).slice(0, 5);
+      return tickets.slice().sort((a, b) => a.price - b.price);
     case SortType.FASTEST:
       return tickets
+        .slice()
         .sort(
           (a, b) =>
             a.segments.reduce((acc, val) => val.duration + acc, 0) -
             b.segments.reduce((acc, val) => val.duration + acc, 0)
-        )
-        .slice(0, 5);
+        );
     case SortType.NONE:
-      return tickets.slice(0, 5);
+      return tickets.slice();
   }
+};
+
+export const getFilteredTickets = (tickets, filters) => {
+  if (filters.size === 0) {
+    return tickets.slice(0, 5);
+  }
+  return tickets
+    .filter(
+      (ticket) =>
+        filters.has(-1) ||
+        (filters.has(ticket.segments[0].stops.length) &&
+          filters.has(ticket.segments[1].stops.length))
+    )
+    .slice(0, 5);
 };
 
 export const getDeclOfNum = (length) => {

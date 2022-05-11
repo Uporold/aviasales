@@ -3,7 +3,7 @@ import SortingView from "../view/sorting-view/sorting-view";
 import TicketView from "../view/ticket-view/ticket-view";
 import TicketsListView from "../view/tickets-list-view/tickets-list-view";
 import { SortType, UpdateType } from "../common/const";
-import { getSortedTickets } from "../common/utils";
+import { getFilteredTickets, getSortedTickets } from "../common/utils";
 import LoadingView from "../view/loading-view/loading-view";
 
 export default class BoardPresenter {
@@ -15,33 +15,42 @@ export default class BoardPresenter {
 
   #ticketsListComponent = null;
   #ticketsModel = null;
+  #filterModel = null;
 
   #loadingComponent = new LoadingView();
   #isLoading = true;
 
-  constructor(boardContainer, ticketsModel) {
+  constructor(boardContainer, ticketsModel, filterModel) {
     this.#boardContainer = boardContainer;
     this.#ticketsModel = ticketsModel;
+    this.#filterModel = filterModel;
   }
 
   get tickets() {
     const tickets = this.#ticketsModel.tickets;
+    const filters = this.#filterModel.filters;
 
     const sortedTickets = getSortedTickets(this.#currentSortType, tickets);
+    const filteredTickets = getFilteredTickets(sortedTickets, filters);
 
-    return sortedTickets;
+    return filteredTickets;
   }
 
   init = () => {
     render(this.#boardContainer, this.#boardElement, RenderPosition.BEFOREEND);
 
     this.#ticketsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
 
     this.#renderBoard();
   };
 
   #handleModelEvent = (updateType) => {
     switch (updateType) {
+      case UpdateType.FILTRATION:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
