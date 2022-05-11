@@ -1,8 +1,9 @@
-import { render, RenderPosition } from "../common/render";
+import { remove, render, RenderPosition } from "../common/render";
 import SortingView from "../view/sorting-view/sorting-view";
 import TicketView from "../view/ticket-view/ticket-view";
 import TicketsListView from "../view/tickets-list-view/tickets-list-view";
 import { SortType } from "../common/const";
+import { getSortedTickets } from "../common/utils";
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -20,16 +21,32 @@ export default class BoardPresenter {
   }
 
   get tickets() {
-    return this.#ticketsModel.tickets;
+    const tickets = this.#ticketsModel.tickets;
+
+    const sortedTickets = getSortedTickets(this.#currentSortType, tickets);
+
+    return sortedTickets;
   }
 
   init = () => {
     render(this.#boardContainer, this.#boardElement, RenderPosition.BEFOREEND);
+
+    this.#renderBoard();
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#currentSortType = sortType;
+    this.#clearBoard();
     this.#renderBoard();
   };
 
   #renderSort = () => {
     this.#sortingComponent = new SortingView(this.#currentSortType);
+    this.#sortingComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
 
     render(
       this.#boardElement,
@@ -58,5 +75,10 @@ export default class BoardPresenter {
   #renderBoard = () => {
     this.#renderSort();
     this.#renderTickets(this.tickets);
+  };
+
+  #clearBoard = () => {
+    remove(this.#sortingComponent);
+    remove(this.#ticketsListComponent);
   };
 }

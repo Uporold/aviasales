@@ -1,3 +1,22 @@
+import { SortType } from "./const";
+
+export const getSortedTickets = (currentSortType, tickets) => {
+  switch (currentSortType) {
+    case SortType.CHEAPEST:
+      return tickets.sort((a, b) => a.price - b.price).slice(0, 5);
+    case SortType.FASTEST:
+      return tickets
+        .sort(
+          (a, b) =>
+            a.segments.reduce((acc, val) => val.duration + acc, 0) -
+            b.segments.reduce((acc, val) => val.duration + acc, 0)
+        )
+        .slice(0, 5);
+    case SortType.NONE:
+      return tickets.slice(0, 5);
+  }
+};
+
 export const getDeclOfNum = (length) => {
   switch (true) {
     case length === 1:

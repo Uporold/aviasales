@@ -7,7 +7,7 @@ export default class TicketsModel {
   }
 
   get tickets() {
-    return this.#tickets.slice(0, 5);
+    return this.#tickets;
   }
 
   init = async () => {
