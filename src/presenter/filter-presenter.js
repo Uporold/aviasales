@@ -35,7 +35,10 @@ export default class FilterPresenter {
     this.init();
   };
 
-  #handleFilterEvent = (filterType) => {
+  #handleFilterEvent = (filterType, focusedElement = undefined) => {
     this.#filterModel.setFilter(filterType);
+    if (focusedElement) {
+      document.getElementById(focusedElement.id).focus();
+    }
   };
 }
