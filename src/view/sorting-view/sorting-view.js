@@ -3,12 +3,12 @@ import AbstractView from "../abstract-view";
 import "./sorting.scss";
 
 const createSortingTemplate = (currentSortType) =>
-  `<div class="sorting__buttons">
-          <button class="btn ${
-            currentSortType === SortType.CHEAPEST ? "btn--active" : ""
+  `<div class="sorting">
+          <button class="sorting__btn ${
+            currentSortType === SortType.CHEAPEST ? "sorting__btn--active" : ""
           }" data-sort-type="${SortType.CHEAPEST}">Самый дешевый</button>
-          <button class="btn ${
-            currentSortType === SortType.FASTEST ? "btn--active" : ""
+          <button class="sorting__btn ${
+            currentSortType === SortType.FASTEST ? "sorting__btn--active" : ""
           }" data-sort-type="${SortType.FASTEST}">Самый быстрый</button>
     </div>`;
 

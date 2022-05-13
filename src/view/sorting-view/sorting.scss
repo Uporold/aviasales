@@ -1,6 +1,6 @@
 @import "src/styles/variables";
 
-.sorting__buttons {
+.sorting {
   position: relative;
   width: 100%;
   height: 50px;
@@ -32,7 +32,7 @@
     background-color: $black;
   }
 
-  .btn {
+  &__btn {
     background-color: $white;
     flex: 1;
     text-transform: uppercase;
