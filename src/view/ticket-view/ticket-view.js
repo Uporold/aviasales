@@ -1,6 +1,10 @@
 import AbstractView from "../abstract-view";
 import "./ticket.scss";
-import { getDeclOfNum, getTicketTimes } from "../../common/utils";
+import {
+  getDeclOfNum,
+  getFormattedPrice,
+  getTicketTimes,
+} from "../../common/utils";
 
 const createTicketRow = (data) => {
   const { origin, destination, date, stops, duration } = data;
@@ -31,9 +35,10 @@ const createTicketRow = (data) => {
 
 const createTicketTemplate = (ticket) => {
   const { price, carrier, segments } = ticket;
+  const formattedPrice = getFormattedPrice(price);
   return `<li class="ticket">
       <div class="ticket__row ticket__row--main">
-        <span>${price} P</span>
+        <span>${formattedPrice} P</span>
         <img src="http://pics.avs.io/99/36/${carrier}.png" alt="Carrier company logo" />
       </div>
       ${segments.map((segment) => createTicketRow(segment)).join("")}

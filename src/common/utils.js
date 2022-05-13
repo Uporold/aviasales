@@ -67,3 +67,6 @@ export const getTicketTimes = (date, duration) => {
     endMinutes,
   };
 };
+
+export const getFormattedPrice = (price) =>
+  new Intl.NumberFormat("ru-RU").format(price);
