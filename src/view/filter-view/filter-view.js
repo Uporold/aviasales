@@ -39,9 +39,10 @@ export default class FilterView extends AbstractView {
 
   #filterKeyupHandler = (evt) => {
     evt.preventDefault();
-    if (evt.keyCode === 32) {
+    if (evt.keyCode === 32 && evt.target.tagName === "INPUT") {
       const focusedElement = this.element.querySelector(":focus");
-      this.callback.filterEvent(+evt.target.value, focusedElement);
+      this.callback.filterEvent(+evt.target.value);
+      document.getElementById(focusedElement.id).focus();
     }
   };
 
